@@ -8,10 +8,10 @@ import gspread
 from google.oauth2.service_account import Credentials
 from concurrent.futures import ThreadPoolExecutor
 
-# إعداد Google Sheets API باستخدام Streamlit Secrets
+# إعداد Google Sheets API باستخدام المفتاح الجديد
 def get_gspread_client():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"], scopes=scope)
+    creds = Credentials.from_service_account_file('new_service_account.json', scopes=scope)
     client = gspread.authorize(creds)
     return client
 
