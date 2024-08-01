@@ -2,8 +2,8 @@ import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
-import json
 import random
+import json
 from streamlit_option_menu import option_menu
 
 # Function to load custom CSS
@@ -51,7 +51,7 @@ def save_data_to_gsheet(data):
     sheet = get_sheet()
     if sheet:
         try:
-            if isinstance(data, list):
+            if isinstance(data, list) and len(data) > 0:
                 sheet.clear()  # Clear the existing data
                 sheet.append_row(list(data[0].keys()))  # Append the header row
                 for row in data:
@@ -61,7 +61,7 @@ def save_data_to_gsheet(data):
 
 # Add new order to the data and Google Sheet
 def save_data(new_data):
-    if 'all_data' not in st.session_state:
+    if 'all_data' not in st.session_state or st.session_state.all_data is None:
         st.session_state.all_data = load_data()
     st.session_state.all_data.insert(0, new_data)
     save_data_to_gsheet(st.session_state.all_data)
@@ -141,7 +141,7 @@ def main():
     check_permission = lambda page: current_user_permissions.get(page, False)
 
     # Load data if not already loaded
-    if "all_data" not in st.session_state:
+    if "all_data" not in st.session_state or st.session_state.all_data is None:
         st.session_state.all_data = load_data()
 
     # Sidebar menu
@@ -182,95 +182,96 @@ def main():
 
     # Orders page
     if selected == "Orders" and check_permission('Orders'):
-        order_tabs = st.tabs(["Pending Orders", "Completed Orders", "Delivered Orders", "Notifications"])
+        if st.session_state.all_data:
+            order_tabs = st.tabs(["Pending Orders", "Completed Orders", "Delivered Orders", "Notifications"])
 
-        # Pending Orders
-        with order_tabs[0]:
-            for i, data in enumerate(st.session_state.all_data):
-                if data.get('status') == 'Pending':
-                    st.markdown(format_order(data, i), unsafe_allow_html=True)
-                    with st.expander(f"View Details for Order {i+1}"):
-                        st.markdown(format_order_details(data), unsafe_allow_html=True)
-                        col1, col2, col3, col4 = st.columns(4)
-                        if col1.button(f"Completed", key=f"toggle_button_pending_{i}"):
-                            update_order_status(i, 'Completed' if data.get('status') == 'Pending' else 'Pending')
-                        if col2.button(f"Delivered", key=f"deliver_button_pending_{i}"):
-                            update_order_status(i, 'Delivered')
-                        if col3.button(f"Delete", key=f"delete_button_pending_{i}"):
-                            delete_order(i)
-                        if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
-                            move_to_notifications(i)
-                        st.write("---")
+            # Pending Orders
+            with order_tabs[0]:
+                for i, data in enumerate(st.session_state.all_data):
+                    if data.get('status') == 'Pending':
+                        st.markdown(format_order(data, i), unsafe_allow_html=True)
+                        with st.expander(f"View Details for Order {i+1}"):
+                            st.markdown(format_order_details(data), unsafe_allow_html=True)
+                            col1, col2, col3, col4 = st.columns(4)
+                            if col1.button(f"Completed", key=f"toggle_button_pending_{i}"):
+                                update_order_status(i, 'Completed' if data.get('status') == 'Pending' else 'Pending')
+                            if col2.button(f"Delivered", key=f"deliver_button_pending_{i}"):
+                                update_order_status(i, 'Delivered')
+                            if col3.button(f"Delete", key=f"delete_button_pending_{i}"):
+                                delete_order(i)
+                            if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
+                                move_to_notifications(i)
+                            st.write("---")
 
-        # Completed Orders
-        with order_tabs[1]:
-            for i, data in enumerate(st.session_state.all_data):
-                if data.get('status') == 'Completed':
-                    st.markdown(format_order(data, i), unsafe_allow_html=True)
-                    with st.expander(f"View Details for Order {i+1}"):
-                        st.markdown(format_order_details(data), unsafe_allow_html=True)
-                        col1, col2, col3, col4 = st.columns(4)
-                        if col1.button(f"Pending", key=f"toggle_button_completed_{i}"):
-                            update_order_status(i, 'Pending' if data.get('status') == 'Completed' else 'Completed')
-                        if col2.button(f"Delivered", key=f"deliver_button_completed_{i}"):
-                            update_order_status(i, 'Delivered')
-                        if col3.button(f"Delete", key=f"delete_button_completed_{i}"):
-                            delete_order(i)
-                        if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
-                            move_to_notifications(i)
-                        st.write("---")
+            # Completed Orders
+            with order_tabs[1]:
+                for i, data in enumerate(st.session_state.all_data):
+                    if data.get('status') == 'Completed':
+                        st.markdown(format_order(data, i), unsafe_allow_html=True)
+                        with st.expander(f"View Details for Order {i+1}"):
+                            st.markdown(format_order_details(data), unsafe_allow_html=True)
+                            col1, col2, col3, col4 = st.columns(4)
+                            if col1.button(f"Pending", key=f"toggle_button_completed_{i}"):
+                                update_order_status(i, 'Pending' if data.get('status') == 'Completed' else 'Completed')
+                            if col2.button(f"Delivered", key=f"deliver_button_completed_{i}"):
+                                update_order_status(i, 'Delivered')
+                            if col3.button(f"Delete", key=f"delete_button_completed_{i}"):
+                                delete_order(i)
+                            if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
+                                move_to_notifications(i)
+                            st.write("---")
 
-        # Delivered Orders
-        with order_tabs[2]:
-            for i, data in enumerate(st.session_state.all_data):
-                if data.get('status') == 'Delivered':
-                    st.markdown(format_order(data, i), unsafe_allow_html=True)
-                    with st.expander(f"View Details for Order {i+1}"):
-                        st.markdown(format_order_details(data), unsafe_allow_html=True)
-                        col1, col3, col4 = st.columns(3)
-                        if col1.button(f"Pending", key=f"toggle_button_delivered_{i}"):
-                            update_order_status(i, 'Pending' if data.get('status') == 'Delivered' else 'Completed')
-                        if col3.button(f"Delete", key=f"delete_button_delivered_{i}"):
-                            delete_order(i)
-                        if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
-                            move_to_notifications(i)
-                        st.write("---")
+            # Delivered Orders
+            with order_tabs[2]:
+                for i, data in enumerate(st.session_state.all_data):
+                    if data.get('status') == 'Delivered':
+                        st.markdown(format_order(data, i), unsafe_allow_html=True)
+                        with st.expander(f"View Details for Order {i+1}"):
+                            st.markdown(format_order_details(data), unsafe_allow_html=True)
+                            col1, col3, col4 = st.columns(3)
+                            if col1.button(f"Pending", key=f"toggle_button_delivered_{i}"):
+                                update_order_status(i, 'Pending' if data.get('status') == 'Delivered' else 'Completed')
+                            if col3.button(f"Delete", key=f"delete_button_delivered_{i}"):
+                                delete_order(i)
+                            if col4.button(f"Notifications", key=f"move_to_notifications_{i}"):
+                                move_to_notifications(i)
+                            st.write("---")
 
-        # Notifications
-        with order_tabs[3]:
-            for i, data in enumerate(st.session_state.all_data):
-                if data.get('status') == 'Notification':
-                    st.markdown(format_order(data, i), unsafe_allow_html=True)
-                    with st.expander(f"View Details for Order {i+1}"):
-                        st.markdown(format_order_details(data), unsafe_allow_html=True)
-                        col1, col3, col2, col4 = st.columns(4)
-                        if col1.button(f"Pending", key=f"toggle_button_notification_{i}"):
-                            update_order_status(i, 'Pending' if data.get('status') == 'Notification' else 'Completed')
-                        if col2.button(f"Delete", key=f"delete_button_notification_{i}"):
-                            delete_order(i)
-                        if col3.button(f"Edit", key=f"edit_button_notification_{i}"):
-                            st.session_state.edit_mode = True
-                            st.session_state.edit_index = i
-                        st.write("---")
+            # Notifications
+            with order_tabs[3]:
+                for i, data in enumerate(st.session_state.all_data):
+                    if data.get('status') == 'Notification':
+                        st.markdown(format_order(data, i), unsafe_allow_html=True)
+                        with st.expander(f"View Details for Order {i+1}"):
+                            st.markdown(format_order_details(data), unsafe_allow_html=True)
+                            col1, col3, col2, col4 = st.columns(4)
+                            if col1.button(f"Pending", key=f"toggle_button_notification_{i}"):
+                                update_order_status(i, 'Pending' if data.get('status') == 'Notification' else 'Completed')
+                            if col2.button(f"Delete", key=f"delete_button_notification_{i}"):
+                                delete_order(i)
+                            if col3.button(f"Edit", key=f"edit_button_notification_{i}"):
+                                st.session_state.edit_mode = True
+                                st.session_state.edit_index = i
+                            st.write("---")
 
-            # Edit mode
-            if 'edit_mode' in st.session_state and st.session_state.edit_mode:
-                index = st.session_state.edit_index
-                data = st.session_state.all_data[index]
-                with st.expander("Edit Order Details", expanded=True):
-                    name = st.text_input("Name", value=data['hello'])
-                    phone = st.text_input("Phone Number", value=data['phone'])
-                    city = st.selectbox("Select City", ["بغداد", "البصرة", "نينوى", "الانبار", "ديالى", "كربلاء", "بابل", "واسط", "صلاح الدين", "القادسيه", "ذي قار", "المثنى", "ميسان", "السليمانية", "دهوك", "اربيل", "كركوك", "النجف", "الموصل", "حلبجة"], index=["بغداد", "البصرة", "نينوى", "الانبار", "ديالى", "كربلاء", "بابل", "واسط", "صلاح الدين", "القادسيه", "ذي قار", "المثنى", "ميسان", "السليمانية", "دهوك", "اربيل", "كركوك", "النجف", "الموصل", "حلبجة"].index(data['city']))
-                    region = st.text_input("Enter the Region", value=data['region'])
-                    kind = st.selectbox("Type of Product", ["smart watch", "airtag"], index=["smart watch", "airtag"].index(data['kind']))
-                    number = st.number_input('Price', min_value=0.0, max_value=500000.0, value=float(data['number']), step=5000.0, format='%0.0f')
-                    total = st.number_input('Total', min_value=0, max_value=100, value=int(data['total']), step=1)
-                    more = st.text_area("Type here for more information", value=data['more'])
+                # Edit mode
+                if 'edit_mode' in st.session_state and st.session_state.edit_mode:
+                    index = st.session_state.edit_index
+                    data = st.session_state.all_data[index]
+                    with st.expander("Edit Order Details", expanded=True):
+                        name = st.text_input("Name", value=data['hello'])
+                        phone = st.text_input("Phone Number", value=data['phone'])
+                        city = st.selectbox("Select City", ["بغداد", "البصرة", "نينوى", "الانبار", "ديالى", "كربلاء", "بابل", "واسط", "صلاح الدين", "القادسيه", "ذي قار", "المثنى", "ميسان", "السليمانية", "دهوك", "اربيل", "كركوك", "النجف", "الموصل", "حلبجة"], index=["بغداد", "البصرة", "نينوى", "الانبار", "ديالى", "كربلاء", "بابل", "واسط", "صلاح الدين", "القادسيه", "ذي قار", "المثنى", "ميسان", "السليمانية", "دهوك", "اربيل", "كركوك", "النجف", "الموصل", "حلبجة"].index(data['city']))
+                        region = st.text_input("Enter the Region", value=data['region'])
+                        kind = st.selectbox("Type of Product", ["smart watch", "airtag"], index=["smart watch", "airtag"].index(data['kind']))
+                        number = st.number_input('Price', min_value=0.0, max_value=500000.0, value=float(data['number']), step=5000.0, format='%0.0f')
+                        total = st.number_input('Total', min_value=0, max_value=100, value=int(data['total']), step=1)
+                        more = st.text_area("Type here for more information", value=data['more'])
 
-                    if st.button("Save Changes"):
-                        updated_data = {'hello': name, 'phone': phone, 'city': city, 'region': region, 'more': more, 'number': number, 'kind': kind, 'total': total}
-                        edit_order(index, updated_data)
-                        st.success("Order updated successfully!")
+                        if st.button("Save Changes"):
+                            updated_data = {'hello': name, 'phone': phone, 'city': city, 'region': region, 'more': more, 'number': number, 'kind': kind, 'total': total}
+                            edit_order(index, updated_data)
+                            st.success("Order updated successfully!")
 
     # Search page
     if selected == "Search" and check_permission('Search'):
