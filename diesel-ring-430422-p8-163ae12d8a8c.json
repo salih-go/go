@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "diesel-ring-430422-p8",
+  "private_key_id": "163ae12d8a8cabcde519bf2dec48234d89d23738",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC1Mb07/XqTsZDv\nwtknjjKK650muuGmBntUzKJDDsBQda8W6/jDbzFUds6m1NJUgS5O7/LJvp0Bne+Y\nSjfwzTqCt32eiouqNeodrIJwvNJ/XR2asyhLi30KKOpmj+uXITajEePF6D/1lZtK\nU6fSBjbhhdET9fNkl1nXFBrP94B1iZoEZfVsZwgzFwOx+fx8nq2bPbfTFXjv/rSp\n96dKeEn1UtL4rFtPfO1v8XcfJKgtMlYRceYAA+MPJ8Ugr/o+8N+PlZ8v4P8Rx58z\nvGACXqdUHwfYB4TQpxpQM7y+zMrBLky5eAJLS/6e7oJRl9m+oZToB3A3lQgz66yN\n+26cH55RAgMBAAECggEACFmrtyNKHhrZi1cfM1W4ChNsKWAE7KYRUnngw3bfUYXu\n5P9Idlc+Pn6ALQuTSt4uMGiZ94avjSbGZy4KcHBA0Uvb/+2yHIzCBo6P71qgV8rG\nhb3abkrWHxz+Gm5pBMy8zByTsufuZKa5op4C1qi/KDsGxOT5i8n207TjPHDTTHdQ\nJ9SeyDl516NBlnxN7M09QpC2G0+x/+IVPZzMGPvqEz0jK0Cm6xC9kG1JzASf0uPJ\nTjhPj0K1ATSSSkzOWVg9+s1iyAFSZsHMN+Rqwr47kjY98hn5jrH89y1mHULif6bb\n+3X2EM+4rhKYbw2TreuZQEPaXhIz4pIea2+xmaa6HQKBgQD2eIATHj6QdFNe3J8E\nxQhZYHyGlYkLStmbWpuzwAo+Kf6OMkWg8pVkL14mD+VTqlYuiYauiCtrDIILfRL8\nQwQxYvWC9z9U7wgdm6Q7ZoEKD4gSSfPs0WedUTEmesoT0g9bLnwe8Sa4RWyWWs8D\nAbjwwtLyMyd2FnyDqoqJRg033QKBgQC8MyacXomZMezXA0M9+aUHpKUfLzLEWWHy\naMNdBf1PBKGD3iu4PyPKVawci5PZtlJmopZpHGh0oJfo0dI1o2I84yCvlnl+5p1D\nyX+lB5kEEReHUKx9TdbF+5FM0+SPWPUPZON5gTI5CdRvq5m2jNNaAxRw+HMVfiro\nFXYwuSazBQKBgQDTPlA3EpL46FqUUW8RfXY8dFAGYZ/Fx+9eEXilxRCCWyfL5BZ9\nbazQ4zBEWxdob/PRixmd+SONankDM73T6/RqB7D5AMSNHRnNlppaNu6eGtW7Jxsj\nfA7cbLw9iLwt5Lo4okzLkFBpW0dITqhioVVLNQ/reiB2O6uYhdCa+ylVGQKBgD4u\nFEKzxXiVEzBTBqNyWQE2d8ve10IiWgcyb+HLOc8is46TGBTO369ZMP1ZbGcRIxZ/\n/3wJA8YMzUQCFxbbvXhqfoElEU1JOoqMB51p7jd2wjRWBjd8QUq2fGJK3Ag0lvsY\nFUQu2H4Z7lNa+fVjf+0MeXN90uA2CE0X0i307oFVAoGAMmIsdZH8uRu3jYD0wp6y\nEsjIhlCqNwwCgoIiLAhRaMfi0UYD7tiXnBPE0ZyHRxP5a1UnfAsDFVTWbulcx5S3\n4US7V14ie+m9XT7xAjbwXiFZZr8exob02rFQ6nC21r50t4T9OhDHYIO04lNHmr0h\nznjtrpnZNfjYWIGJpsTSoN0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "salih-442@diesel-ring-430422-p8.iam.gserviceaccount.com",
+  "client_id": "102587591317239998899",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/salih-442%40diesel-ring-430422-p8.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
