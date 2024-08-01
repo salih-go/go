@@ -94,7 +94,6 @@ def get_sheet():
             st.error(f"Failed to open Google Sheet: {e}")
     return None
 
-@st.cache_data(ttl=600)  # This decorator ensures the function is cached for 10 minutes
 def load_data():
     with st.spinner('Loading data...'):
         sheet = get_sheet()
