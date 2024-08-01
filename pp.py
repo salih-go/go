@@ -97,13 +97,14 @@ def get_sheet():
 
 @st.cache_data(ttl=600)
 def load_data():
-    sheet = get_sheet()
-    if sheet:
-        try:
-            data = sheet.get_all_records()
-            return data if isinstance(data, list) else []
-        except Exception as e:
-            st.error(f"Failed to load data from Google Sheet: {e}")
+    with st.spinner('Loading data...'):
+        sheet = get_sheet()
+        if sheet:
+            try:
+                data = sheet.get_all_records()
+                return data if isinstance(data, list) else []
+            except Exception as e:
+                st.error(f"Failed to load data from Google Sheet: {e}")
     return []
 
 def save_data_to_gsheet(data):
