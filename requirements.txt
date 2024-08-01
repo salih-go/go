@@ -1,0 +1,7 @@
+streamlit
+pandas
+plotly
+streamlit-option-menu
+gspread
+google-auth
+google-auth-oauthlib
