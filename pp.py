@@ -78,14 +78,13 @@ load_css("custom.css")
 
 def get_gspread_client():
     try:
-        # استخدم st.secrets للحصول على المعلومات مباشرة من إعدادات التطبيق
         creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
         client = gspread.authorize(creds)
         return client
     except Exception as e:
+        print("Failed to authenticate with Google Sheets:", str(e))
         st.error(f"Failed to authenticate with Google Sheets: {e}")
         return None
-
 def get_sheet():
     client = get_gspread_client()
     if client:
