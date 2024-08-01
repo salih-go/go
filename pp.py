@@ -17,13 +17,16 @@ def load_css(file_name):
 # Authenticate with Google Sheets
 def get_gspread_client():
     try:
-        creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+        creds = Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"],
+            scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        )
         client = gspread.authorize(creds)
         return client
     except Exception as e:
         st.error(f"Failed to authenticate with Google Sheets: {e}")
         return None
-
+        
 # Open the Google Sheet
 def get_sheet():
     client = get_gspread_client()
