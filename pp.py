@@ -78,9 +78,10 @@ load_css("custom.css")
 
 def get_gspread_client():
     try:
-        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-        creds = Credentials.from_service_account_file('diesel-ring-430422-p8-163ae12d8a8c.json', scopes=scope)
-        return gspread.authorize(creds)
+        # استخدم st.secrets للحصول على المعلومات مباشرة من إعدادات التطبيق
+        creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+        client = gspread.authorize(creds)
+        return client
     except Exception as e:
         st.error(f"Failed to authenticate with Google Sheets: {e}")
         return None
