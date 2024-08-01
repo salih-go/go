@@ -21,23 +21,22 @@ def get_gspread_client():
     client = gspread.authorize(creds)
     return client
 
-# استخدم هذه الدالة لإجراء العمليات على Google Sheets
-def use_sheets():
+def get_sheet():
     client = get_gspread_client()
-    sheet = client.open("MyTestSheet").sheet1  # تغيير "Sheet Name" إلى اسم ورقتك
-    data = sheet.get_all_records()
-    return data
-# Load data from Google Sheets
+    # تأكد من استبدال 'Your Sheet Name' بإسم الورقة الصحيح
+    return client.open("MyTestSheet").sheet1
+
 def load_data():
     with st.spinner('Loading data...'):
         sheet = get_sheet()
         if sheet:
             try:
                 data = sheet.get_all_records()
-                return data if isinstance(data, list) else []
+                return data
             except Exception as e:
-                st.error(f"Failed to load data from Google Sheet: {e}")
-                return []
+                st.error("Failed to load data: " + str(e))
+        else:
+            st.error("Failed to get the Google Sheet.")
 
 # Save data to Google Sheets
 def save_data_to_gsheet(data):
