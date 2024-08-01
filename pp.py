@@ -16,27 +16,17 @@ def load_css(file_name):
 
 # Authenticate with Google Sheets
 def get_gspread_client():
-    try:
-        creds = Credentials.from_service_account_info(
-            st.secrets["gcp_service_account"],
-            scopes=["https://www.googleapis.com/auth/spreadsheets"]
-        )
-        client = gspread.authorize(creds)
-        return client
-    except Exception as e:
-        st.error(f"Failed to authenticate with Google Sheets: {e}")
-        return None
-        
-# Open the Google Sheet
-def get_sheet():
-    client = get_gspread_client()
-    if client:
-        try:
-            return client.open("MyTestSheet").sheet1
-        except Exception as e:
-            st.error(f"Failed to open Google Sheet: {e}")
-            return None
+    creds_info = st.secrets["gcp_service_account"]
+    creds = Credentials.from_service_account_info(creds_info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    client = gspread.authorize(creds)
+    return client
 
+# استخدم هذه الدالة لإجراء العمليات على Google Sheets
+def use_sheets():
+    client = get_gspread_client()
+    sheet = client.open("MyTestSheet").sheet1  # تغيير "Sheet Name" إلى اسم ورقتك
+    data = sheet.get_all_records()
+    return data
 # Load data from Google Sheets
 def load_data():
     with st.spinner('Loading data...'):
